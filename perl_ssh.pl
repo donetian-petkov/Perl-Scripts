@@ -7,12 +7,6 @@ use Net::OpenSSH;
 
 my %ssh_configuration;
 
-$ssh_configuration{'username'} = '';
-$ssh_configuration{'host'} = '';
-$ssh_configuration{'port'} = 0;
-$ssh_configuration{'key'} = '';
-$ssh_configuration{'passphrase'} = '';
-
 if ($#ARGV == 4) {
     $ssh_configuration{'username'} = $ARGV[0];
     $ssh_configuration{'host'} = $ARGV[1];
@@ -21,41 +15,61 @@ if ($#ARGV == 4) {
     $ssh_configuration{'passphrase'} = $ARGV[4];
 }
 else {
-    print "Please provide SSH username: ";
+    print "You must provide valid key-based SSH credentials: \n";
+
+    print "Please provide the username: ";
     $ssh_configuration{'username'} = <STDIN>;
     chomp $ssh_configuration{'username'};
 
-    print "Please provide server: ";
+    print "Please provide the server: ";
     $ssh_configuration{'host'} = <STDIN>;
     chomp $ssh_configuration{'host'};
 
-    print "Please provide port: ";
+    print "Please provide the port: ";
     $ssh_configuration{'port'} = <STDIN>;
     chomp $ssh_configuration{'port'};
 
-    print "Please provide path to key: ";
+    print "Please provide the path to the key: ";
     $ssh_configuration{'key'} = <STDIN>;
     chomp $ssh_configuration{'key'};
 
-    print "Please provide private key's passphrase: ";
+    print "Please provide the private key's passphrase: ";
+    system ("stty -echo");
     $ssh_configuration{'passphrase'} = <STDIN>;
+    system ("stty echo");
     chomp $ssh_configuration{'passphrase'};
+
+    for my $key ( keys %ssh_configuration ) {
+        my $value = $ssh_configuration{$key};
+        if ($value eq '') {
+            print "You have not submitted all of the required details! \n";
+            exit 1;
+        }
+    }
 }
 
-print "Provide the command, which should be executed on the remote machine: ";
+print "Provide the command, which should be executed on the remote machine: \n";
+
 my $cmd = <STDIN>;
-chomp $cmd;
+
+if ($cmd eq '') {
+    print "You have provided an empty SSH command!";
+    exit 1;
+}
 
 print "Connecting via SSH... \n";
 
 my $ssh = Net::OpenSSH->new(
-                      $ssh_configuration{'host'},
-    user           => $ssh_configuration{'username'},
-    port           => $ssh_configuration{'port'},
-    key_path       => $ssh_configuration{'key'},
-    passphrase     => $ssh_configuration{'passphrase'});
+    $ssh_configuration{'host'},
+    user       => $ssh_configuration{'username'},
+    port       => $ssh_configuration{'port'},
+    key_path   => $ssh_configuration{'key'},
+    passphrase => $ssh_configuration{'passphrase'}
+);
 $ssh->error and
     die "Couldn't establish SSH connection: " . $ssh->error;
+
+print "Successfully connected to SSH!\n";
 
 my $ssh_output = $ssh->capture($cmd);
 $ssh->error and
@@ -66,3 +80,5 @@ print OUTFILE $ssh_output;
 close(OUTFILE);
 
 undef $ssh;
+
+print "SSH Command Executed Successfully and the output has been saved to ssh_output.txt! \n";
