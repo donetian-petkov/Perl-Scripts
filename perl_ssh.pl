@@ -43,7 +43,7 @@ else {
         my $value = $ssh_configuration{$key};
         if ($value eq '') {
             print "You have not submitted all of the required details! \n";
-            exit 1;
+            exit;
         }
     }
 
@@ -56,7 +56,7 @@ my $cmd = <STDIN>;
 
 if ($cmd eq '') {
     print "You have provided an empty SSH command!";
-    exit 1;
+    exit;
 }
 
 print "Connecting via SSH... \n";
