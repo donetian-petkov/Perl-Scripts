@@ -76,13 +76,13 @@ if (lc($should_mail) eq "yes") {
         my $value = $smtp_configuration{$key};
         if ($value eq '') {
             print "Not all of the SMTP details were added. \n";
-            exit 1;
+            exit;
         }
     }
 
     if ($recipient eq '') {
         print "The recipient can not be empty. \n";
-        exit 1;
+        exit;
     }
 
     my $transport = Email::Sender::Transport::SMTP->new(
