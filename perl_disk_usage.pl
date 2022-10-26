@@ -16,8 +16,6 @@ if (not @ARGV) {
 
 my $directory = $ARGV[0];
 
-print $directory . "\n";
-
 my $message = '';
 my $x = Number::Format -> new();
 
