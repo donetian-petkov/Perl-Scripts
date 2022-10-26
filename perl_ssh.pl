@@ -46,6 +46,8 @@ else {
             exit 1;
         }
     }
+
+    print "\n";
 }
 
 print "Provide the command, which should be executed on the remote machine: \n";
