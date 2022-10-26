@@ -89,3 +89,11 @@ To which email address should the details be sent: ***********
 
 Email Sent Successfully
 ```
+Dependencies: 
+Filesys::DiskUsage
+Number::Format
+Email::Sender::Simple
+Email::Sender::Transport::SMTP
+Email::Simple
+Email::Simple::Creator
+Try::Tiny
