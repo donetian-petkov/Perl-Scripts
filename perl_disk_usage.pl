@@ -23,24 +23,54 @@ foreach my $entry (sort { $sizes{$a} <=> $sizes{$b} } keys %sizes) {
     $message = $message . "\n" . $entry . " => " . $size ;
 }
 
-my $smtpserver = 'es13.siteground.eu';
-my $smtpport = 465;
-my $smtpuser   = 'testing@donetianpetkov.com';
-my $smtppassword = 'Siteground93!';
+my $smtp_server = '';
+my $smtp_port = 0;
+my $smtp_username   = '';
+my $smtp_password = '';
+
+my $should_mail = 0;
+
+print "Should the disk usage be sent to your email address: yes / no \n";
+if (<STDIN> eq "yes") {
+    $should_mail = 1;
+
+    print "Provide valid SMTP configuration: \n";
+
+    print "SMTP Server: ";
+    $smtp_server = <STDIN>;
+    chomp $smtp_server;
+
+    print "SMTP Port: ";
+    $smtp_port = <STDIN>;
+    chomp $smtp_port;
+
+    print "SMTP Username: ";
+    $smtp_username = <STDIN>;
+    chomp $smtp_username;
+
+    print "SMTP Password: ";
+    $smtp_password = <STDIN>;
+    chomp $smtp_password;
+
+    print "To which email address should the details be sent: ";
+    $recipient = <STDIN>;
+    chomp $recipient;
+}
+
 
 my $transport = Email::Sender::Transport::SMTP->new(
-    host => $smtpserver,
-    port => $smtpport,
+    host => $smtp_server,
+    port => $smtp_port,
     ssl => 'ssl',
-    sasl_username => $smtpuser,
-    sasl_password => $smtppassword,
+    sasl_username => $smtp_username,
+    sasl_password => $smtp_password,
     helo => 'testingdonetianpetkov'
 );
 
 my $email = Email::Simple->create(
   header => [
     To      => 'donetian.petkov@gmail.com',
-    From    => $smtpuser,
+    From    => $smtp_username,
     Subject => 'Hi! Test',
   ],
   body => $message,
