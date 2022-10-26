@@ -36,7 +36,7 @@ if (lc($print_calc) eq "yes") {
     print $message . "\n";
 }
 
-print "Should the disk usage be sent to your email address: yes / no \n";
+print "\nShould the disk usage be sent to your email address: yes / no \n";
 my $should_mail = <STDIN>;
 chomp $should_mail;
 
@@ -50,7 +50,7 @@ if (lc($should_mail) eq "yes") {
     $smtp_configuration{'password'} = '';
     my $recipient = '';
 
-    print "Provide valid SMTP configuration: \n";
+    print "\nProvide valid SMTP configuration: \n";
 
     print "SMTP Server: ";
     $smtp_configuration{'server'} = <STDIN>;
@@ -109,7 +109,7 @@ if (lc($should_mail) eq "yes") {
         exit 0;
     };
 
-    print "Email Sent Successfully\n";
+    print "\nEmail Sent Successfully\n";
 }
 
 
