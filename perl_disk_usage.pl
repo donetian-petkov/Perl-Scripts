@@ -43,6 +43,8 @@ chomp $should_mail;
 if (lc($should_mail) eq "yes") {
 
     my %smtp_configuration;
+    my $regex_email_address = qr/[a-z0-9_+]([a-z0-9_+.]*[a-z0-9_+])?\@[a-z0-9.-]+/;
+    my $regex_port = qr/\d+/;
 
     $smtp_configuration{'server'} = '';
     $smtp_configuration{'port'} = 0;
@@ -60,7 +62,7 @@ if (lc($should_mail) eq "yes") {
     $smtp_configuration{'port'} = <STDIN>;
     chomp $smtp_configuration{'port'};
 
-    if ($smtp_configuration{'port'} !~ m/\d+/) {
+    if ($smtp_configuration{'port'} !~ $regex_port) {
         print "The port must be a number! \n";
         print "Enter the port again: ";
         $smtp_configuration{'port'} = <STDIN>;
@@ -71,6 +73,13 @@ if (lc($should_mail) eq "yes") {
     $smtp_configuration{'username'} = <STDIN>;
     chomp $smtp_configuration{'username'};
 
+    if ($smtp_configuration{'username'} !~ $regex_email_address) {
+        print "The submitted email address is not valid \n";
+        print "Enter the email address again: ";
+        $smtp_configuration{'username'} = <STDIN>;
+        chomp $smtp_configuration{'username'};
+    }
+
     print "SMTP Password: ";
     $smtp_configuration{'password'} = <STDIN>;
     chomp $smtp_configuration{'password'};
@@ -79,7 +88,7 @@ if (lc($should_mail) eq "yes") {
     $recipient = <STDIN>;
     chomp $recipient;
 
-    if ($recipient !~ m/[a-z0-9_+]([a-z0-9_+.]*[a-z0-9_+])?\@[a-z0-9.-]+/) {
+    if ($recipient !~ $regex_email_address) {
         print "The submitted email address is not valid \n";
         print "Enter the email address again: ";
         $recipient = <STDIN>;
