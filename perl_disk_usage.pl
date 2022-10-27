@@ -60,6 +60,13 @@ if (lc($should_mail) eq "yes") {
     $smtp_configuration{'port'} = <STDIN>;
     chomp $smtp_configuration{'port'};
 
+    if ($smtp_configuration{'port'} !~ m/\d+/) {
+        print "The port must be a number! \n";
+        print "Enter the port again: ";
+        $smtp_configuration{'port'} = <STDIN>;
+        chomp $smtp_configuration{'port'};
+    }
+
     print "SMTP Username: ";
     $smtp_configuration{'username'} = <STDIN>;
     chomp $smtp_configuration{'username'};
@@ -71,6 +78,13 @@ if (lc($should_mail) eq "yes") {
     print "To which email address should the details be sent: ";
     $recipient = <STDIN>;
     chomp $recipient;
+
+    if ($recipient !~ m/[a-z0-9_+]([a-z0-9_+.]*[a-z0-9_+])?\@[a-z0-9.-]+/) {
+        print "The submitted email address is not valid \n";
+        print "Enter the email address again: ";
+        $recipient = <STDIN>;
+        chomp $recipient;
+    }
 
     for my $key ( keys %smtp_configuration ) {
         my $value = $smtp_configuration{$key};
