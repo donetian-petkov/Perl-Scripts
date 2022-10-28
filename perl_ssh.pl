@@ -29,6 +29,13 @@ else {
     $ssh_configuration{'port'} = <STDIN>;
     chomp $ssh_configuration{'port'};
 
+    if ($ssh_configuration{'port'} !~ m/\d+/) {
+        print "The port must be a number! \n";
+        print "Please enter the port again: ";
+        $ssh_configuration{'port'} = <STDIN>;
+        chomp $ssh_configuration{'port'};
+    }
+
     print "Please provide the path to the key: ";
     $ssh_configuration{'key'} = <STDIN>;
     chomp $ssh_configuration{'key'};
